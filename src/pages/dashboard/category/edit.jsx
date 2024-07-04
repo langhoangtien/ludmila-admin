@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useMemo, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -24,18 +24,17 @@ export default function CategoryEditPage() {
     code: Yup.string().required('Code is required'),
     name: Yup.string().required('Name is required'),
   });
-  const defaultValues = {
-    code: '',
-    name: '',
-  };
+  const defaultValues = useMemo(
+    () => ({
+      code: '',
+      name: '',
+    }),
+    []
+  );
 
   const methods = useForm({ resolver: yupResolver(NewCategorySchema), defaultValues });
   const {
     reset,
-    watch,
-    setValue,
-    handleSubmit,
-    control,
 
     formState: { isSubmitting },
   } = methods;

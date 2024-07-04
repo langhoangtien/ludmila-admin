@@ -13,16 +13,18 @@ import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import ProductNewEditForm from '../product-new-edit-form';
+import { ProductItemSkeleton } from '../product-skeleton';
 
 // ----------------------------------------------------------------------
 
 export default function ProductEditView({ id }) {
   const settings = useSettingsContext();
-
+  const [loading, setLoading] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(null);
   useEffect(() => {
     const getData = async () => {
       try {
+        setLoading(true);
         const responseData = await getProduct(id);
 
         const productData = responseData.data;
@@ -49,8 +51,8 @@ export default function ProductEditView({ id }) {
           brand,
           vendor,
         };
-        console.log('CURENT PRODUCT', product);
         setCurrentProduct(product);
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -74,7 +76,7 @@ export default function ProductEditView({ id }) {
         }}
       />
 
-      <ProductNewEditForm currentProduct={currentProduct} />
+      {loading ? <ProductItemSkeleton /> : <ProductNewEditForm currentProduct={currentProduct} />}
     </Container>
   );
 }

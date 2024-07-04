@@ -18,6 +18,10 @@ const ROOTS = {
 
 export const paths = {
   comingSoon: '/coming-soon',
+  confirmEmail: '/confirm-email',
+  confirmNewEmail: '/confirm-new-email',
+  passwordChange: '/password-change',
+
   maintenance: '/maintenance',
   pricing: '/pricing',
   payment: '/payment',

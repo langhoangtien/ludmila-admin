@@ -31,6 +31,7 @@ export function textField(theme) {
     // LABEL
     MuiFormLabel: {
       styleOverrides: {
+        asterisk: { color: theme.palette.error.main },
         root: {
           ...font.value,
           color: color.placeholder,

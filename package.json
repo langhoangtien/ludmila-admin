@@ -1,8 +1,8 @@
 {
-  "name": "@minimal-kit/vite-js",
-  "author": "Minimals",
-  "version": "5.7.0",
-  "description": "Vite & JavaScript",
+  "name": "ludmila-admin",
+  "author": "langhoangtien",
+  "version": "1.0.0",
+  "description": "Admin page for Ludmila project",
   "private": true,
   "type": "module",
   "scripts": {

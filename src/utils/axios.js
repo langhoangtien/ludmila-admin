@@ -53,6 +53,12 @@ export const endpoints = {
     search: '/api/v1/products/s',
     removeMany: '/api/v1/products/remove-many',
   },
+  user: {
+    list: '/api/v1/users',
+    details: '/api/v1/users/663f3067cc624fb4df7fc6bf',
+    search: '/api/v1/users/s',
+    removeMany: '/api/v1/users/remove-many',
+  },
   category: {
     list: '/api/v1/categories',
     details: '/api/v1/categories/663f3067cc624fb4df7fc6bf',
@@ -63,6 +69,10 @@ export const endpoints = {
     list: '/api/v1/countries',
     details: '/api/v1/countries/663f3067cc624fb4df7fc6bf',
     search: '/api/v1/countries/s',
+    removeMany: '/api/v1/countries/remove-many',
+  },
+  order: {
+    list: '/api/v1/orders',
     removeMany: '/api/v1/countries/remove-many',
   },
   brand: {

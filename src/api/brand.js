@@ -65,7 +65,7 @@ export function useSearchBrands(query) {
 
   return memoizedValue;
 }
-export const getBrands = async () => axiosInstance.get('/api/v1/brands');
+export const getBrands = async () => axiosInstance.get('/api/v1/brands?limit=500');
 
 export const getBrand = async (brandId) => axiosInstance.get(`/api/v1/brands/${brandId}`);
 // Functions for brand operations

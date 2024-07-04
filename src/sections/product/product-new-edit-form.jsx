@@ -69,6 +69,7 @@ const TABLE_HEAD_PRODUCT_VARIANT = [
   { id: 'name', label: 'Name' },
   { id: 'image', label: 'Image' },
   { id: 'price', label: 'Price' },
+  { id: 'discount', label: 'Discount' },
   { id: 'salePrice', label: 'Sale Price' },
   { id: 'quantity', label: 'Quantity' },
   { id: 'attributes', label: 'Attributes' },
@@ -115,7 +116,7 @@ export default function ProductNewEditForm({ currentProduct }) {
         image: Yup.mixed(),
         quantity: Yup.number().required('Variant quantity is required'),
         price: Yup.number().required('Variant quantity is required'),
-        salePrice: Yup.number().required('Variant quantity is required'),
+        discount: Yup.number().min(0).max(100).required('Variant discount is required'),
         attributes: Yup.array().of(
           Yup.object().shape({
             name: Yup.string().required('Variant Attribute name is required'),
@@ -143,7 +144,7 @@ export default function ProductNewEditForm({ currentProduct }) {
       brand: currentProduct?.brand || '',
       attributes: currentProduct?.attributes || [],
       variants: currentProduct?.variants || [
-        { name: '', image: '', price: 0, salePrice: 0, quantity: 0, attributes: [] },
+        { name: '', image: '', price: 0, discount: 0, quantity: 0, attributes: [] },
       ],
     }),
     [currentProduct]
@@ -180,8 +181,6 @@ export default function ProductNewEditForm({ currentProduct }) {
   }, [currentProduct, defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log('DATA', data);
-
     const variants = values.variants.map((variant) => ({
       ...variant,
       attributes: variant.attributes.length ? variant.attributes : undefined,
@@ -194,7 +193,8 @@ export default function ProductNewEditForm({ currentProduct }) {
       variants,
       attributes: data.attributes.length ? data.attributes : undefined,
     };
-    console.log('DATASEND', dataSend);
+
+    // return;
     try {
       if (currentProduct) {
         await updateProduct(currentProduct.id, dataSend);
@@ -205,7 +205,6 @@ export default function ProductNewEditForm({ currentProduct }) {
       reset();
       enqueueSnackbar(currentProduct ? 'Update success!' : 'Create success!');
       router.push(paths.dashboard.product.root);
-      console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }
@@ -287,7 +286,7 @@ export default function ProductNewEditForm({ currentProduct }) {
             name: 'TÊN',
             image: '',
             price: 0,
-            salePrice: 0,
+            discount: 0,
             quantity: 0,
             attributes: [],
           },
@@ -302,7 +301,7 @@ export default function ProductNewEditForm({ currentProduct }) {
       name: 'TÊN',
       image: '',
       price: 0,
-      salePrice: 0,
+      discount: 0,
       quantity: 0,
       attributes: attribute,
     }));
@@ -326,7 +325,6 @@ export default function ProductNewEditForm({ currentProduct }) {
         const countries = dataArray[1].data.items;
         const brands = dataArray[2].data.items;
         setDataSelect({ categories, countries, brands });
-        console.log(dataArray);
       } catch (error) {
         console.log(error);
       }
@@ -508,8 +506,8 @@ export default function ProductNewEditForm({ currentProduct }) {
                       </TableCell>
                       <TableCell align="left">
                         <RHFTextField
-                          name={`variants[${indexItem}].salePrice`}
-                          label="Sale Price"
+                          name={`variants[${indexItem}].discount`}
+                          label="Discount"
                           placeholder={0}
                           size="small"
                           type="number"
@@ -526,6 +524,12 @@ export default function ProductNewEditForm({ currentProduct }) {
                         />
                       </TableCell>
                       <TableCell align="left">
+                        {Math.round(
+                          values.variants[indexItem].price *
+                            (1 - values.variants[indexItem].discount / 100)
+                        )}
+                      </TableCell>
+                      <TableCell align="left">
                         <RHFTextField
                           name={`variants[${indexItem}].quantity`}
                           label="Quantity"
@@ -536,7 +540,9 @@ export default function ProductNewEditForm({ currentProduct }) {
                         />
                       </TableCell>
                       <TableCell align="left">
-                        {item.attributes.map((i) => `${i.name}: ${i.value}`).toString()}
+                        <Box sx={{ color: 'error.main' }} component="span">
+                          {item.attributes.map((i) => `${i.name}: ${i.value}`).toString()}
+                        </Box>
                       </TableCell>
                     </TableRow>
                   ))}

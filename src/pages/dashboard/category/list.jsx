@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
-import { useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { LoadingButton } from '@mui/lab';
@@ -12,6 +12,7 @@ import {
   Stack,
   Button,
   Dialog,
+  MenuItem,
   Container,
   CardHeader,
   Typography,
@@ -26,14 +27,14 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { endpoints } from 'src/utils/axios';
 
-import { addCategory, updateCategory } from 'src/api/category';
+import { addCategory, getCategories, updateCategory } from 'src/api/category';
 
 import Iconify from 'src/components/iconify';
-import { RHFTextField } from 'src/components/hook-form';
 import ApiTable from 'src/components/api-table/api-table';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import FormProvider from 'src/components/hook-form/form-provider';
+import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 const TABLE_HEAD = [
   { id: 'children', label: '', align: 'left' },
@@ -45,6 +46,7 @@ const TABLE_HEAD = [
 export default function CategoryListPage() {
   const dialog = useBoolean();
   const [reload, setReload] = useState(true);
+  const [categories, setCategories] = useState([]); // Thêm dòng này
   const settings = useSettingsContext();
   const { enqueueSnackbar } = useSnackbar();
   const NewCategorySchema = Yup.object().shape({
@@ -58,9 +60,22 @@ export default function CategoryListPage() {
       code: '',
       name: '',
       _id: '',
+      parentId: '',
     }),
     []
   );
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const responseData = await getCategories();
+        const categoriesData = responseData.data.items;
+        setCategories(categoriesData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getData();
+  }, []); // Thêm dòng này
   const methods = useForm({ resolver: yupResolver(NewCategorySchema), defaultValues });
   const {
     reset,
@@ -174,6 +189,22 @@ export default function CategoryListPage() {
               <Card>
                 <CardHeader title="Avatar" />
                 <Stack p={3} spacing={3}>
+                  <RHFSelect
+                    size="small"
+                    name="parentId"
+                    InputLabelProps={{ shrink: true }}
+                    PaperPropsSx={{ textTransform: 'capitalize' }}
+                    label="Parent Category"
+                  >
+                    <MenuItem value={null}>
+                      <em>None</em>
+                    </MenuItem>
+                    {categories.map((category) => (
+                      <MenuItem key={category._id} value={category._id}>
+                        {category.name}
+                      </MenuItem>
+                    ))}
+                  </RHFSelect>
                   <RHFTextField required size="small" name="name" label="Category Name" />
                   <RHFTextField required size="small" name="code" label="Category Code" />
                 </Stack>

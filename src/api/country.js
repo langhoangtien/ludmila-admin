@@ -65,7 +65,7 @@ export function useSearchCountries(query) {
 
   return memoizedValue;
 }
-export const getCountries = async () => axiosInstance.get('/api/v1/countries');
+export const getCountries = async () => axiosInstance.get('/api/v1/countries?limit=500');
 
 export const getCountry = async (countryId) => axiosInstance.get(`/api/v1/countries/${countryId}`);
 // Functions for country operations

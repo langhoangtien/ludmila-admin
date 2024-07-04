@@ -12,7 +12,16 @@ import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
-import { Paper, Button, Collapse, TableHead, TextField, InputAdornment } from '@mui/material';
+import {
+  Box,
+  Paper,
+  Button,
+  Collapse,
+  TableHead,
+  TextField,
+  InputAdornment,
+  CircularProgress,
+} from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useDebounce } from 'src/hooks/use-debounce';
@@ -110,12 +119,10 @@ export default function ApiTable({ apiURL, mapFunction, tableHead, reload = fals
       const { items } = data;
       const totalCount = data.count;
       const dataMapped = items.map((item) => mapFunction(item));
-      console.log('DATAMAP', dataMapped);
       setTableData(dataMapped);
       setCount(totalCount);
       setLoading(false);
     } catch (error) {
-      console.log(error);
       setError(error.message);
       setLoading(false);
     }
@@ -191,62 +198,75 @@ export default function ApiTable({ apiURL, mapFunction, tableHead, reload = fals
         </Stack>
       </Stack>
 
-      <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-        <TableSelectedAction
-          dense={dense}
-          numSelected={selected.length}
-          rowCount={tableData.length}
-          onSelectAllRows={(checked) =>
-            onSelectAllRows(
-              checked,
-              tableData.map((row) => row._id)
-            )
-          }
-          action={
-            <Tooltip on title="Delete">
-              <IconButton onClick={confirmRows.onTrue} color="primary">
-                <Iconify icon="solar:trash-bin-trash-bold" />
-              </IconButton>
-            </Tooltip>
-          }
-        />
+      {loading ? (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: { md: 480, xs: 280 },
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : (
+        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+          <TableSelectedAction
+            dense={dense}
+            numSelected={selected.length}
+            rowCount={tableData.length}
+            onSelectAllRows={(checked) =>
+              onSelectAllRows(
+                checked,
+                tableData.map((row) => row._id)
+              )
+            }
+            action={
+              <Tooltip on title="Delete">
+                <IconButton onClick={confirmRows.onTrue} color="primary">
+                  <Iconify icon="solar:trash-bin-trash-bold" />
+                </IconButton>
+              </Tooltip>
+            }
+          />
 
-        <Scrollbar>
-          <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
-            <TableHeadCustom
-              order={order}
-              orderBy={orderBy}
-              headLabel={tableHead}
-              rowCount={count}
-              numSelected={selected.length}
-              onSort={onSort}
-              onSelectAllRows={(checked) =>
-                onSelectAllRows(
-                  checked,
-                  tableData.map((row) => row.id)
-                )
-              }
-            />
-
-            <TableBody>
-              {tableData.map((row) => (
-                <CollapsibleTableRow
-                  tableHead={tableHead}
-                  row={row}
-                  selected={selected.includes(row._id)}
-                  onSelectRow={() => onSelectRow(row._id)}
-                  checked={selected.includes(row._id)}
-                />
-              ))}
-
-              <TableEmptyRows
-                height={denseHeight}
-                emptyRows={emptyRows(page, rowsPerPage, count)}
+          <Scrollbar>
+            <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
+              <TableHeadCustom
+                order={order}
+                orderBy={orderBy}
+                headLabel={tableHead}
+                rowCount={count}
+                numSelected={selected.length}
+                onSort={onSort}
+                onSelectAllRows={(checked) =>
+                  onSelectAllRows(
+                    checked,
+                    tableData.map((row) => row.id)
+                  )
+                }
               />
-            </TableBody>
-          </Table>
-        </Scrollbar>
-      </TableContainer>
+
+              <TableBody>
+                {tableData.map((row) => (
+                  <CollapsibleTableRow
+                    tableHead={tableHead}
+                    row={row}
+                    selected={selected.includes(row._id)}
+                    onSelectRow={() => onSelectRow(row._id)}
+                    checked={selected.includes(row._id)}
+                  />
+                ))}
+
+                <TableEmptyRows
+                  height={denseHeight}
+                  emptyRows={emptyRows(page, rowsPerPage, count)}
+                />
+              </TableBody>
+            </Table>
+          </Scrollbar>
+        </TableContainer>
+      )}
 
       <TablePaginationCustom
         count={count}
@@ -288,6 +308,7 @@ ApiTable.propTypes = {
   apiURL: PropTypes.string,
   mapFunction: PropTypes.func,
   tableHead: PropTypes.array,
+  reload: PropTypes.bool,
 };
 
 function CollapsibleTableRow({ row, checked, selected, onSelectRow, tableHead }) {

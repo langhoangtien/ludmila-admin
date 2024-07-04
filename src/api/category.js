@@ -65,8 +65,7 @@ export function useSearchCategories(query) {
 
   return memoizedValue;
 }
-export const getCategories = async (categoryData) =>
-  axiosInstance.get('/api/v1/categories', categoryData);
+export const getCategories = async () => axiosInstance.get('/api/v1/categories?limit=500');
 
 export const getCategory = async (categoryId) =>
   axiosInstance.get(`/api/v1/categories/${categoryId}`);

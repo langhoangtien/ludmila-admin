@@ -1,3 +1,4 @@
+import { generateCustomers } from 'src/utils/common';
 import axiosInstance, { encodeData } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
@@ -18,3 +19,9 @@ export const deleteCustomer = async (customerId) =>
 
 export const deleteCustomers = async (customerIds) =>
   axiosInstance.delete(`/api/v1/customers/remove-many?ids=${encodeData(customerIds)}`);
+
+export const generateCustomerAPI = async () => {
+  const customers = generateCustomers(100000);
+  const customerPromises = customers.map((customer) => addCustomer(customer));
+  await Promise.all(customerPromises);
+};
