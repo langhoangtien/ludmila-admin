@@ -9,6 +9,8 @@ RUN npm ci
 
 COPY . .
 
+ENV NODE_OPTIONS="--max-old-space-size=8192"
+
 RUN npm run build
 
 FROM nginx:latest as prod
