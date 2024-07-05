@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  ludmiala-admin:
+    build:
+      context: .
+      dockerfile: document.Dockerfile
+    ports:
+      - '805:80'
+    volumes:
+      - ludmiala-admin:/usr/share/nginx/html
+
+volumes:
+  ludmiala-admin:
+    driver: local
