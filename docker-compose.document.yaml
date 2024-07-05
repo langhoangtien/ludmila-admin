@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: document.Dockerfile
     ports:
-      - '805:80'
+      - '80:80'
     volumes:
       - ludmiala-admin:/usr/share/nginx/html
 
