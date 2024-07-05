@@ -71,7 +71,7 @@ export default function CountryListPage() {
   const {
     reset,
     watch,
-    setValue,
+
     handleSubmit,
 
     formState: { isSubmitting },
@@ -91,12 +91,6 @@ export default function CountryListPage() {
       console.log(error);
     }
   });
-  const loadValue = (country) => {
-    Object.keys(country).forEach((key) => {
-      setValue(key, country[key]);
-    });
-    dialog.onTrue();
-  };
 
   const addNewCountry = () => {
     reset(defaultValues);

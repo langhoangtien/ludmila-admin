@@ -48,7 +48,7 @@ export default function PasswordChangePage() {
 
       setTimer(timerId); // Save the timer ID in state
 
-      return () => clearTimeout(timerId);
+      clearTimeout(timerId);
     }
   }, [countdown, isSubmit, loading, textError]);
 

@@ -43,8 +43,8 @@ export default function UserListView() {
   const settings = useSettingsContext();
   const dialog = useBoolean();
   const [id, setId] = useState(null);
-  const handleDialog = (id) => {
-    setId(id);
+  const handleDialog = (idx) => {
+    setId(idx);
     dialog.onTrue();
   };
   return (

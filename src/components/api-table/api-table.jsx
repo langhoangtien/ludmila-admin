@@ -48,7 +48,7 @@ import { ConfirmDialog } from '../custom-dialog';
 
 export default function ApiTable({ apiURL, mapFunction, tableHead, reload = false }) {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+
   const [text, setText] = useState('');
   const debounceText = useDebounce(text, 600);
   const [dense, setDense] = useState(false);
@@ -123,18 +123,18 @@ export default function ApiTable({ apiURL, mapFunction, tableHead, reload = fals
       setCount(totalCount);
       setLoading(false);
     } catch (error) {
-      setError(error.message);
       setLoading(false);
     }
   };
   const fetchDataCallback = useCallback(fetchData, [
-    apiURL,
-    order,
-    orderBy,
     rowsPerPage,
     page,
+    orderBy,
+    order,
+    tableHead,
+    apiURL,
     debounceText,
-    reload,
+    mapFunction,
   ]);
   useEffect(() => {
     fetchDataCallback();

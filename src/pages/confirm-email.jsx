@@ -49,7 +49,7 @@ export default function ConfirmEmailPage() {
 
       setTimer(timerId); // Save the timer ID in state
 
-      return () => clearTimeout(timerId);
+      clearTimeout(timerId);
     }
   }, [countdown, loading]);
 

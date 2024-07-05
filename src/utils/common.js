@@ -354,7 +354,7 @@ const generateData = () => {
 
 export const generateCustomers = (number) => {
   const customers = [];
-  for (let i = 0; i < number; i++) {
+  for (let i = 0; i < number; i += 1) {
     const customer = generateData();
     customers.push(customer);
   }

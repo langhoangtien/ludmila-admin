@@ -29,6 +29,7 @@ import { addUser, getUser, updateUser } from 'src/api/user';
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify/iconify';
 import { useSnackbar } from 'src/components/snackbar';
+import { SplashScreen } from 'src/components/loading-screen';
 import FormProvider, {
   RHFSwitch,
   RHFSelect,
@@ -131,154 +132,160 @@ export default function UserNewEditForm({ id }) {
         setLoading(false);
       } catch (error) {
         console.log(error);
+        setLoading(false);
       }
     };
     getData();
-  }, [id]);
+  }, [id, reset]);
   return (
-    <FormProvider methods={methods} onSubmit={onSubmit}>
-      <Grid xs={12} md={4}>
-        <Card sx={{ pt: 10, pb: 5, px: 3 }}>
-          {id && (
-            <Label
-              color={
-                (values.status === 'active' && 'success') ||
-                (values.status === 'banned' && 'error') ||
-                'warning'
-              }
-              sx={{ position: 'absolute', top: 24, right: 24 }}
-            >
-              {values.status}
-            </Label>
-          )}
+    <>
+      {loading && <SplashScreen />}
+      <FormProvider methods={methods} onSubmit={onSubmit}>
+        <Grid xs={12} md={4}>
+          <Card sx={{ pt: 10, pb: 5, px: 3 }}>
+            {id && (
+              <Label
+                color={
+                  (values.status === 'active' && 'success') ||
+                  (values.status === 'banned' && 'error') ||
+                  'warning'
+                }
+                sx={{ position: 'absolute', top: 24, right: 24 }}
+              >
+                {values.status}
+              </Label>
+            )}
 
-          <Box sx={{ mb: 5 }}>
-            <RHFUploadAvatar
-              name="photo"
-              maxSize={3145728}
-              onDrop={handleDropPhoto}
-              helperText={
-                <Typography
-                  variant="caption"
-                  sx={{
-                    mt: 3,
-                    mx: 'auto',
-                    display: 'block',
-                    textAlign: 'center',
-                    color: 'text.disabled',
-                  }}
-                >
-                  Allowed *.jpeg, *.jpg, *.png, *.gif
-                  <br /> max size of {fData(3145728)}
-                </Typography>
-              }
-            />
-          </Box>
+            <Box sx={{ mb: 5 }}>
+              <RHFUploadAvatar
+                name="photo"
+                maxSize={3145728}
+                onDrop={handleDropPhoto}
+                helperText={
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      mt: 3,
+                      mx: 'auto',
+                      display: 'block',
+                      textAlign: 'center',
+                      color: 'text.disabled',
+                    }}
+                  >
+                    Allowed *.jpeg, *.jpg, *.png, *.gif
+                    <br /> max size of {fData(3145728)}
+                  </Typography>
+                }
+              />
+            </Box>
 
-          {id && (
-            <FormControlLabel
+            {id && (
+              <FormControlLabel
+                labelPlacement="start"
+                control={
+                  <Controller
+                    name="status"
+                    control={control}
+                    render={({ field }) => (
+                      <Switch
+                        {...field}
+                        checked={field.value !== 'active'}
+                        onChange={(event) =>
+                          field.onChange(event.target.checked ? 'banned' : 'active')
+                        }
+                      />
+                    )}
+                  />
+                }
+                label={
+                  <>
+                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+                      Banned
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                      Apply disable account
+                    </Typography>
+                  </>
+                }
+                sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
+              />
+            )}
+
+            <RHFSwitch
+              name="isVerified"
               labelPlacement="start"
-              control={
-                <Controller
-                  name="status"
-                  control={control}
-                  render={({ field }) => (
-                    <Switch
-                      {...field}
-                      checked={field.value !== 'active'}
-                      onChange={(event) =>
-                        field.onChange(event.target.checked ? 'banned' : 'active')
-                      }
-                    />
-                  )}
-                />
-              }
               label={
                 <>
                   <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                    Banned
+                    Email Verified
                   </Typography>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    Apply disable account
+                    Disabling this will automatically send the user a verification email
                   </Typography>
                 </>
               }
-              sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
+              sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
             />
-          )}
 
-          <RHFSwitch
-            name="isVerified"
-            labelPlacement="start"
-            label={
-              <>
-                <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                  Email Verified
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  Disabling this will automatically send the user a verification email
-                </Typography>
-              </>
-            }
-            sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-          />
+            {id && (
+              <Stack justifyContent="center" alignItems="center" sx={{ mt: 3 }}>
+                <Button variant="soft" color="error">
+                  Delete User
+                </Button>
+              </Stack>
+            )}
+          </Card>
+        </Grid>
 
-          {id && (
-            <Stack justifyContent="center" alignItems="center" sx={{ mt: 3 }}>
-              <Button variant="soft" color="error">
-                Delete User
-              </Button>
-            </Stack>
-          )}
-        </Card>
-      </Grid>
-
-      <Grid xs={12} md={8}>
-        <Card sx={{ p: 3 }}>
-          <Box
-            rowGap={3}
-            columnGap={2}
-            display="grid"
-            gridTemplateColumns={{
-              xs: 'repeat(1, 1fr)',
-              sm: 'repeat(2, 1fr)',
-            }}
-          >
-            <RHFTextField size="small" name="firstName" label="First Name *" />
-            <RHFTextField size="small" name="lastName" label="Last Name *" />
-            <RHFTextField
-              size="small"
-              name="password"
-              label="Password *"
-              type={password.value ? 'text' : 'password'}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={password.onToggle} edge="end">
-                      <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
-                    </IconButton>
-                  </InputAdornment>
-                ),
+        <Grid xs={12} md={8}>
+          <Card sx={{ p: 3 }}>
+            <Box
+              rowGap={3}
+              columnGap={2}
+              display="grid"
+              gridTemplateColumns={{
+                xs: 'repeat(1, 1fr)',
+                sm: 'repeat(2, 1fr)',
               }}
-            />
-            <RHFTextField size="small" name="email" label="Email Address *" />
-            <RHFTextField size="small" name="phoneNumber" label="Phone Number" />
+            >
+              <RHFTextField size="small" name="firstName" label="First Name *" />
+              <RHFTextField size="small" name="lastName" label="Last Name *" />
+              <RHFTextField
+                size="small"
+                name="password"
+                label="Password *"
+                type={password.value ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={password.onToggle} edge="end">
+                        <Iconify
+                          icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'}
+                        />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <RHFTextField size="small" name="email" label="Email Address *" />
+              <RHFTextField size="small" name="phoneNumber" label="Phone Number" />
 
-            <RHFSelect size="small" label="Role *" name="role">
-              <MenuItem value="admin">Admin</MenuItem>
-              <MenuItem value="user">User</MenuItem>
-              <MenuItem value="cilent">Client</MenuItem>
-            </RHFSelect>
-          </Box>
+              <RHFSelect size="small" label="Role *" name="role">
+                <MenuItem value="admin">Admin</MenuItem>
+                <MenuItem value="user">User</MenuItem>
+                <MenuItem value="cilent">Client</MenuItem>
+              </RHFSelect>
+            </Box>
 
-          <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-            <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-              {!id ? 'Create User' : 'Save Changes'}
-            </LoadingButton>
-          </Stack>
-        </Card>
-      </Grid>
-    </FormProvider>
+            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                {!id ? 'Create User' : 'Save Changes'}
+              </LoadingButton>
+            </Stack>
+          </Card>
+        </Grid>
+      </FormProvider>
+    </>
   );
 }
 
