@@ -182,8 +182,8 @@ export default function HomeHero() {
             textAlign: 'center',
           }}
         >
-          Start a <br />
-          New Project with
+          Bắt đầu môyj <br />
+          Dự án mới
         </Typography>
       </m.div>
 
@@ -197,7 +197,7 @@ export default function HomeHero() {
             repeat: Infinity,
           }}
         >
-          Minimal
+          Ludmila
         </StyledTextGradient>
       </m.div>
 

@@ -101,7 +101,7 @@ export default function AuthClassicLayout({ children, image, title }) {
       }}
     >
       <Typography variant="h3" sx={{ maxWidth: 480, textAlign: 'center' }}>
-        {title || 'Hi, Welcome back'}
+        {title || 'Xin chào, Chào mừng bạn trở lại'}
       </Typography>
 
       <Box

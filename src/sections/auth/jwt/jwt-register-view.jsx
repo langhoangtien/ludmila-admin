@@ -77,13 +77,13 @@ export default function JwtRegisterView() {
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-      <Typography variant="h4">Get started absolutely free</Typography>
+      <Typography variant="h4">Bắt đầu hoàn toàn miễn phí</Typography>
 
       <Stack direction="row" spacing={0.5}>
-        <Typography variant="body2"> Already have an account? </Typography>
+        <Typography variant="body2"> Bạn đã có tài khoản? </Typography>
 
         <Link href={paths.auth.jwt.login} component={RouterLink} variant="subtitle2">
-          Sign in
+          Đăng ký
         </Link>
       </Stack>
     </Stack>
@@ -99,13 +99,13 @@ export default function JwtRegisterView() {
         color: 'text.secondary',
       }}
     >
-      {'By signing up, I agree to '}
+      {'Bằng cách tạo tài khoản, bạn đồng ý với '}
       <Link underline="always" color="text.primary">
-        Terms of Service
+        Điều khoản dịch vụ
       </Link>
-      {' and '}
+      {' và '}
       <Link underline="always" color="text.primary">
-        Privacy Policy
+        Chính sách bảo mật
       </Link>
       .
     </Typography>
@@ -114,15 +114,15 @@ export default function JwtRegisterView() {
   const renderForm = (
     <Stack spacing={2.5}>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <RHFTextField name="firstName" label="First name" />
-        <RHFTextField name="lastName" label="Last name" />
+        <RHFTextField name="firstName" label="Họ" />
+        <RHFTextField name="lastName" label="Tên" />
       </Stack>
 
-      <RHFTextField name="email" label="Email address" />
+      <RHFTextField name="email" label="Email" />
 
       <RHFTextField
         name="password"
-        label="Password"
+        label="Mật khẩu"
         type={password.value ? 'text' : 'password'}
         InputProps={{
           endAdornment: (
@@ -143,7 +143,7 @@ export default function JwtRegisterView() {
         variant="contained"
         loading={isSubmitting}
       >
-        Create account
+        Tạo tài khoản
       </LoadingButton>
     </Stack>
   );

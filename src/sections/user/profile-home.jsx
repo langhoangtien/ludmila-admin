@@ -41,14 +41,14 @@ export default function ProfileHome({ info, posts }) {
         <Stack width={1}>
           {fNumber(info.totalFollowers)}
           <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>
-            Follower
+            Người theo dõi
           </Box>
         </Stack>
 
         <Stack width={1}>
           {fNumber(info.totalFollowing)}
           <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>
-            Following
+            Đang theo dõi
           </Box>
         </Stack>
       </Stack>
@@ -57,7 +57,7 @@ export default function ProfileHome({ info, posts }) {
 
   const renderAbout = (
     <Card>
-      <CardHeader title="About" />
+      <CardHeader title="Thông tìn" />
 
       <Stack spacing={2} sx={{ p: 3 }}>
         <Box sx={{ typography: 'body2' }}>{info.quote}</Box>

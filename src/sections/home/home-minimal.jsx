@@ -49,13 +49,13 @@ export default function HomeMinimal() {
       >
         <m.div variants={varFade().inUp}>
           <Typography component="div" variant="overline" sx={{ color: 'text.disabled' }}>
-            Minimal UI
+            Ludmila Admin
           </Typography>
         </m.div>
 
         <m.div variants={varFade().inDown}>
           <Typography variant="h2">
-            What Minimal <br /> helps you?
+            What Ludmila <br /> helps you?
           </Typography>
         </m.div>
       </Stack>

@@ -8,7 +8,7 @@ export default function RegisterPage() {
   return (
     <>
       <Helmet>
-        <title> Jwt: Register</title>
+        <title> Đăng ký</title>
       </Helmet>
 
       <JwtRegisterView />

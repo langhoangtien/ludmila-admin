@@ -7,8 +7,9 @@ import Tabs, { tabsClasses } from '@mui/material/Tabs';
 
 import { paths } from 'src/routes/paths';
 
-import { useMockedUser } from 'src/hooks/use-mocked-user';
+import { convertImagePathToUrl } from 'src/utils/common';
 
+import { useAuthContext } from 'src/auth/hooks';
 import { _userAbout, _userFeeds, _userFriends, _userGallery, _userFollowers } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
@@ -26,22 +27,22 @@ import ProfileFollowers from '../profile-followers';
 const TABS = [
   {
     value: 'profile',
-    label: 'Profile',
+    label: 'Cá nhân',
     icon: <Iconify icon="solar:user-id-bold" width={24} />,
   },
   {
     value: 'followers',
-    label: 'Followers',
+    label: 'Người theo dõi',
     icon: <Iconify icon="solar:heart-bold" width={24} />,
   },
   {
     value: 'friends',
-    label: 'Friends',
+    label: 'Bạn bè',
     icon: <Iconify icon="solar:users-group-rounded-bold" width={24} />,
   },
   {
     value: 'gallery',
-    label: 'Gallery',
+    label: 'Thư viện',
     icon: <Iconify icon="solar:gallery-wide-bold" width={24} />,
   },
 ];
@@ -51,7 +52,7 @@ const TABS = [
 export default function UserProfileView() {
   const settings = useSettingsContext();
 
-  const { user } = useMockedUser();
+  const { user } = useAuthContext();
 
   const [searchFriends, setSearchFriends] = useState('');
 
@@ -71,8 +72,8 @@ export default function UserProfileView() {
         heading="Profile"
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'User', href: paths.dashboard.user.root },
-          { name: user?.displayName },
+          { name: 'Người dùng', href: paths.dashboard.user.root },
+          { name: user?.fullName },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
@@ -87,8 +88,8 @@ export default function UserProfileView() {
       >
         <ProfileCover
           role={_userAbout.role}
-          name={user?.displayName}
-          avatarUrl={user?.photoURL}
+          name={user?.fullName}
+          avatarUrl={convertImagePathToUrl(user?.photo)}
           coverUrl={_userAbout.coverUrl}
         />
 

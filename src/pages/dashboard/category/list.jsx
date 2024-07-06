@@ -60,7 +60,7 @@ export default function CategoryListPage() {
       code: '',
       name: '',
       _id: '',
-      parentId: undefined,
+      parentId: null,
     }),
     []
   );

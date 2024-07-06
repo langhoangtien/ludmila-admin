@@ -61,7 +61,7 @@ const authAmplify = {
       path: 'register',
       element: (
         <GuestGuard>
-          <AuthClassicLayout title="Manage the job more effectively with Minimal">
+          <AuthClassicLayout title="Quản lý công việc hiệu quả hơn với Ludmila">
             <AmplifyRegisterPage />
           </AuthClassicLayout>
         </GuestGuard>
@@ -104,7 +104,7 @@ const authJwt = {
       path: 'register',
       element: (
         <GuestGuard>
-          <AuthClassicLayout title="Manage the job more effectively with Minimal">
+          <AuthClassicLayout title="Quản lý công việc hiệu quả hơn với Ludmila">
             <JwtRegisterPage />
           </AuthClassicLayout>
         </GuestGuard>

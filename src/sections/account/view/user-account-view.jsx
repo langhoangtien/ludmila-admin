@@ -62,11 +62,11 @@ export default function AccountView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Account"
+        heading="Tài khoản"
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'User', href: paths.dashboard.user.root },
-          { name: 'Account' },
+          { name: 'Người dùng', href: paths.dashboard.user.root },
+          { name: 'Tài khoản' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
