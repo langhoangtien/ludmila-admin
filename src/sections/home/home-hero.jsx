@@ -182,7 +182,7 @@ export default function HomeHero() {
             textAlign: 'center',
           }}
         >
-          Bắt đầu môyj <br />
+          Bắt đầu một <br />
           Dự án mới
         </Typography>
       </m.div>
