@@ -69,8 +69,8 @@ const TABLE_HEAD_PRODUCT_VARIANT = [
   { id: 'name', label: 'Name' },
   { id: 'image', label: 'Image' },
   { id: 'price', label: 'Price' },
-  { id: 'discount', label: 'Discount' },
-  { id: 'salePrice', label: 'Sale Price' },
+  { id: 'salePrice', label: 'Giá khuyến mại' },
+  { id: 'discount', label: 'Giảm giá' },
   { id: 'quantity', label: 'Quantity' },
   { id: 'attributes', label: 'Attributes' },
 ];
@@ -116,7 +116,11 @@ export default function ProductNewEditForm({ currentProduct }) {
         image: Yup.mixed(),
         quantity: Yup.number().required('Variant quantity is required'),
         price: Yup.number().required('Variant quantity is required'),
-        discount: Yup.number().min(0).max(100).required('Variant discount is required'),
+        salePrice: Yup.number()
+          .required('Variant salePrice is required')
+          .when('price', (price, schema) =>
+            schema.max(price, 'Sale price should not be greater than price')
+          ),
         attributes: Yup.array().of(
           Yup.object().shape({
             name: Yup.string().required('Variant Attribute name is required'),
@@ -144,7 +148,7 @@ export default function ProductNewEditForm({ currentProduct }) {
       brand: currentProduct?.brand || '',
       attributes: currentProduct?.attributes || [],
       variants: currentProduct?.variants || [
-        { name: '', image: '', price: 0, discount: 0, quantity: 0, attributes: [] },
+        { name: '', image: '', price: 0, salePrice: 0, quantity: 0, attributes: [] },
       ],
     }),
     [currentProduct]
@@ -286,7 +290,7 @@ export default function ProductNewEditForm({ currentProduct }) {
             name: 'TÊN',
             image: '',
             price: 0,
-            discount: 0,
+            salePrice: 0,
             quantity: 0,
             attributes: [],
           },
@@ -301,7 +305,7 @@ export default function ProductNewEditForm({ currentProduct }) {
       name: 'TÊN',
       image: '',
       price: 0,
-      discount: 0,
+      salePrice: 0,
       quantity: 0,
       attributes: attribute,
     }));
@@ -335,11 +339,11 @@ export default function ProductNewEditForm({ currentProduct }) {
   const renderVariantProperty = (
     <Grid xs={6}>
       <Dialog open={dialog.value} maxWidth="md" onClose={handleCloseDialog} fullWidth>
-        <DialogTitle>Add attributes to the product</DialogTitle>
+        <DialogTitle>Thêm thuộc tính cho sản phẩm</DialogTitle>
 
         <DialogContent>
           <Typography sx={{ color: 'text.secondary', p: 1 }}>
-            Press the Enter key to add a value to the attribute
+            Nhấn <i>Enter</i> để thêm thuộc tính cho sản phẩm
           </Typography>
           <Stack spacing={3}>
             <Box
@@ -506,8 +510,8 @@ export default function ProductNewEditForm({ currentProduct }) {
                       </TableCell>
                       <TableCell align="left">
                         <RHFTextField
-                          name={`variants[${indexItem}].discount`}
-                          label="Discount"
+                          name={`variants[${indexItem}].salePrice`}
+                          label="Giá khuyến mại"
                           placeholder={0}
                           size="small"
                           type="number"
@@ -524,10 +528,11 @@ export default function ProductNewEditForm({ currentProduct }) {
                         />
                       </TableCell>
                       <TableCell align="left">
-                        {Math.round(
-                          values.variants[indexItem].price *
-                            (1 - values.variants[indexItem].discount / 100)
+                        {caculateDiscount(
+                          values.variants[indexItem].price,
+                          values.variants[indexItem].salePrice
                         )}
+                        %
                       </TableCell>
                       <TableCell align="left">
                         <RHFTextField
@@ -762,6 +767,11 @@ export default function ProductNewEditForm({ currentProduct }) {
       </Grid>
     </FormProvider>
   );
+}
+
+function caculateDiscount(price, salePrice) {
+  if (price === 0) return 0;
+  return Math.round(((price - salePrice) / price) * 100);
 }
 
 ProductNewEditForm.propTypes = {
