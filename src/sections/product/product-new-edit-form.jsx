@@ -35,12 +35,15 @@ import { fData } from 'src/utils/format-number';
 import { _tags } from 'src/_mock';
 // import { useGetCategories } from 'src/api/category';
 
+import slugify from 'slugify';
+
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import {
+  randomProductCode,
   convertImagePathToUrl,
   convertImageUrlToPath,
   makeProductVariantsFromAttributes,
@@ -87,60 +90,80 @@ export default function ProductNewEditForm({ currentProduct }) {
   const [dataSelect, setDataSelect] = useState({ categories: [], countries: [], brands: [] });
   const dialog = useBoolean();
 
-  const NewProductSchema = Yup.object().shape({
-    image: Yup.mixed().nullable(),
-    name: Yup.string().required('Name is required'),
-    slug: Yup.string()
-      .matches(/^[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*$/gim, 'Requires correct slug url format')
-      .required('Slug is required'),
-    code: Yup.string().required('Code is required'),
-    barCode: Yup.string(),
-    introduction: Yup.string(),
-    images: Yup.array(),
-    tags: Yup.array(),
-    category: Yup.string().required('Category is required'),
-    country: Yup.string().required('Country is required'),
-    brand: Yup.string().required('Brand is required'),
-    price: Yup.number().moreThan(0, 'Price should not be $0.00'),
-    description: Yup.string(),
-    // not required
+  const NewProductSchema = Yup.object().shape(
+    {
+      image: Yup.mixed().nullable(),
+      name: Yup.string().required('Name is required'),
+      slug: Yup.string().when('slug', (val, schema) => {
+        console.log('VAL', val);
 
-    attributes: Yup.array().of(
-      Yup.object().shape({
-        name: Yup.string().required('Attribute name is required'),
-        values: Yup.array().min(1, 'Attribute values is required'),
-      })
-    ),
-    variants: Yup.array().of(
-      Yup.object().shape({
-        image: Yup.mixed(),
-        quantity: Yup.number().required('Variant quantity is required'),
-        price: Yup.number().required('Variant quantity is required'),
-        salePrice: Yup.number()
-          .required('Variant salePrice is required')
-          .when('price', (price, schema) =>
-            schema.max(price, 'Sale price should not be greater than price')
+        if (val?.[0]) {
+          return Yup.string().matches(
+            /^[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*$/gim,
+            'Requires correct slug url format'
+          );
+        }
+        return Yup.string().notRequired();
+      }),
+      code: Yup.string().when('code', (val, schema) => {
+        if (val?.[0]) {
+          return Yup.string().min(2, 'Code should be at least 2 characters');
+        }
+        return Yup.string().notRequired();
+      }),
+
+      barCode: Yup.string(),
+      introduction: Yup.string(),
+      images: Yup.array(),
+      tags: Yup.array(),
+      category: Yup.string().required('Category is required'),
+      country: Yup.string().required('Country is required'),
+      brand: Yup.string().required('Brand is required'),
+      price: Yup.number().moreThan(0, 'Price should not be $0.00'),
+      description: Yup.string(),
+      // not required
+
+      attributes: Yup.array().of(
+        Yup.object().shape({
+          name: Yup.string().required('Attribute name is required'),
+          values: Yup.array().min(1, 'Attribute values is required'),
+        })
+      ),
+      variants: Yup.array().of(
+        Yup.object().shape({
+          image: Yup.mixed(),
+          quantity: Yup.number().required('Variant quantity is required'),
+          price: Yup.number().required('Variant quantity is required'),
+          salePrice: Yup.number()
+            .required('Variant salePrice is required')
+            .when('price', (price, schema) =>
+              schema.max(price, 'Sale price should not be greater than price')
+            ),
+          attributes: Yup.array().of(
+            Yup.object().shape({
+              name: Yup.string().required('Variant Attribute name is required'),
+              value: Yup.string().required('Variant Attribute value is required'),
+            })
           ),
-        attributes: Yup.array().of(
-          Yup.object().shape({
-            name: Yup.string().required('Variant Attribute name is required'),
-            value: Yup.string().required('Variant Attribute value is required'),
-          })
-        ),
-      })
-    ),
-  });
+        })
+      ),
+    },
+    [
+      ['slug', 'slug'],
+      ['code', 'code'],
+    ]
+  );
 
   const defaultValues = useMemo(
     () => ({
       name: currentProduct?.name || '',
-      slug: currentProduct?.slug || '',
+      slug: currentProduct?.slug || undefined,
       description: currentProduct?.description || '',
       introduction: currentProduct?.introduction || '',
       image: currentProduct?.image || '',
       images: currentProduct?.images || [],
       //
-      code: currentProduct?.code || '',
+      code: currentProduct?.code || undefined,
       barCode: currentProduct?.barCode || '',
       tags: currentProduct?.tags || [],
       category: currentProduct?.category || '',
@@ -177,6 +200,7 @@ export default function ProductNewEditForm({ currentProduct }) {
     name: 'variants',
   });
   const values = watch();
+  console.log(values);
 
   useEffect(() => {
     if (currentProduct) {
@@ -190,9 +214,15 @@ export default function ProductNewEditForm({ currentProduct }) {
       attributes: variant.attributes.length ? variant.attributes : undefined,
       image: convertImageUrlToPath(variant.image),
     }));
+
     const dataSend = {
       ...data,
+      slug: data.slug
+        ? data.slug
+        : slugify(data.name, { locale: 'vi', remove: /[*+~.()'"!:@]/g }).toLowerCase(),
       image: convertImageUrlToPath(data.image),
+      code: data.code || randomProductCode(),
+
       images: data.images.map((img) => convertImageUrlToPath(img)),
       variants,
       attributes: data.attributes.length ? data.attributes : undefined,
@@ -632,8 +662,13 @@ export default function ProductNewEditForm({ currentProduct }) {
                 }}
               >
                 <RHFTextField required size="small" name="name" label="Product Name" />
-                <RHFTextField required size="small" name="slug" label="Product URL" />
-                <RHFTextField required size="small" name="code" label="Product Code" />
+                <RHFTextField
+                  type="text"
+                  size="small"
+                  name="slug"
+                  label="Product URL(Không bắt buộc)"
+                />
+                <RHFTextField size="small" name="code" label="Product Code" />
 
                 <RHFTextField size="small" name="barCode" label="Product barCode" />
               </Box>
@@ -684,6 +719,7 @@ export default function ProductNewEditForm({ currentProduct }) {
                   size="small"
                   name="category"
                   label="Category"
+                  required
                   InputLabelProps={{ shrink: true }}
                   PaperPropsSx={{ textTransform: 'capitalize' }}
                 >
@@ -700,6 +736,7 @@ export default function ProductNewEditForm({ currentProduct }) {
                   size="small"
                   name="country"
                   label="Country"
+                  required
                   InputLabelProps={{ shrink: true }}
                   PaperPropsSx={{ textTransform: 'capitalize' }}
                 >
@@ -716,6 +753,7 @@ export default function ProductNewEditForm({ currentProduct }) {
                   size="small"
                   name="brand"
                   label="Brand"
+                  required
                   InputLabelProps={{ shrink: true }}
                   PaperPropsSx={{ textTransform: 'capitalize' }}
                 >

@@ -90,7 +90,9 @@ export default function EditForm({ dialog, categories, categoryCurrent }) {
   const NewCategorySchema = Yup.object().shape(
     {
       code: Yup.string().when('code', (val, schema) => {
-        if (val?.length > 0) {
+        if (val?.[0]) {
+          console.log('val_cate', val);
+
           return Yup.string().matches(
             /^[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*$/gim,
             'Requires correct slug url format'
@@ -128,7 +130,9 @@ export default function EditForm({ dialog, categories, categoryCurrent }) {
     try {
       const mappedData = {
         ...data,
-        code: data.code ? data.code : slugify(data.name, { locale: 'vi' }).toLowerCase(),
+        code: data.code
+          ? data.code
+          : slugify(data.name, { locale: 'vi', remove: /[*+~.()'"!:@]/g }).toLowerCase(),
       };
       if (!values._id) await addCategory(mappedData);
       if (values._id) await updateCategory(values._id, mappedData);

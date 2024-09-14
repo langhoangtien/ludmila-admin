@@ -10,19 +10,25 @@ export const convertImageUrlToPath = (url = '') => {
   const paths = url.split('/');
   return paths[paths.length - 1];
 };
-// const atts2 = [
-//   { name: "Màu sắc", values: ["xanh", "do"] },
-//   { name: "Size", values: ["S", "M"] },
-// ];
-// const atts1 = [{ name: "Màu sắc", values: ["xanh", "do"] }];
+export const randomProductCode = () => {
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const digits = '0123456789';
+  let result = '';
 
-// const atts3 = [
-//   { name: "Màu sắc", values: ["xanh", "do"] },
-//   { name: "Size", values: ["S", "M"] },
-//   { name: "Chất liệu", values: ["Cotton", "Nỉ"] },
-//   { name: "Giới tính", values: ["Nam", "Nữ"] },
-//   { name: "Quy cách", values: ["1 Khuya", "2 Khuy", "3 Khuy"] },
-// ];
+  // Thêm 3 ký tự viết hoa ngẫu nhiên
+  for (let i = 0; i < 2; i += 1) {
+    const randomIndex = Math.floor(Math.random() * letters.length);
+    result += letters[randomIndex];
+  }
+
+  // Thêm 5 chữ số ngẫu nhiên
+  for (let i = 0; i < 8; i += 1) {
+    const randomIndex = Math.floor(Math.random() * digits.length);
+    result += digits[randomIndex];
+  }
+
+  return result;
+};
 export function makeProductVariantsFromAttributes(attributes) {
   // if (attributes.length === 1)
   //   return attributes[0].values.map((i) => [{ name: attributes[0].name, value: i }]);

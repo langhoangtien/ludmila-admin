@@ -33,7 +33,7 @@ export default function EditForm({ dialog, current }) {
   const NewBrandSchema = Yup.object().shape(
     {
       code: Yup.string().when('code', (val, schema) => {
-        if (val?.length > 0) {
+        if (val?.[0]) {
           return Yup.string().matches(
             /^[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*$/gim,
             'Requires correct slug url format'
@@ -50,7 +50,7 @@ export default function EditForm({ dialog, current }) {
   );
   const defaultValues = useMemo(
     () => ({
-      code: '',
+      code: undefined,
       name: '',
       _id: '',
       image: undefined,
@@ -72,7 +72,9 @@ export default function EditForm({ dialog, current }) {
     try {
       const mappedData = {
         ...data,
-        code: data.code ? data.code : slugify(data.name, { locale: 'vi' }).toLowerCase(),
+        code: data.code
+          ? data.code
+          : slugify(data.name, { locale: 'vi', remove: /[*+~.()'"!:@]/g }).toLowerCase(),
       };
       if (!values._id) await addBrand(mappedData);
       if (values._id) await updateBrand(values._id, mappedData);
