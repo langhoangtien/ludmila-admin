@@ -89,10 +89,9 @@ export default function BrandListPage() {
         >
           <ApiTable
             tableHead={TABLE_HEAD}
-            apiURL={endpoints.brand.list} // Thay đổi từ 'category.list' thành 'brand.list'
+            apiURL={endpoints.brand.list}
             mapFunction={(brand) => ({
-              // Thay đổi từ 'category' thành 'brand'
-              ...brand, // Thay đổi từ 'category' thành 'brand'
+              ...brand,
               name: (
                 <Typography
                   onClick={() => handleOpenDialog(brand)}

@@ -21,7 +21,7 @@ import {
 } from '@mui/material';
 
 import { fData } from 'src/utils/format-number';
-import { convertImagePathToUrl } from 'src/utils/common';
+import { convertImagePathToUrl, convertImageUrlToPath } from 'src/utils/common';
 
 import { uploadFile } from 'src/api/file';
 import { addBrand, updateBrand } from 'src/api/brand';
@@ -72,6 +72,7 @@ export default function EditForm({ dialog, current }) {
     try {
       const mappedData = {
         ...data,
+        image: convertImageUrlToPath(data.image),
         code: data.code
           ? data.code
           : slugify(data.name, { locale: 'vi', remove: /[*+~.()'"!:@]/g }).toLowerCase(),
@@ -91,7 +92,7 @@ export default function EditForm({ dialog, current }) {
       setValue('name', current.name);
       setValue('_id', current._id);
       setValue('description', current.description);
-      setValue('image', current.image);
+      setValue('image', convertImagePathToUrl(current.image));
     } else {
       reset(defaultValues);
     }
