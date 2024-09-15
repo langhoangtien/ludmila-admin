@@ -85,6 +85,71 @@ const LIST_ICON = [
     count: 33,
     image: '/assets/images/categories/ho_tro_tinh_duc_level_2.png',
   },
+  {
+    name: 'thuc_pham_chuc_nang_level_1.png',
+    count: 44,
+    image: '/assets/images/categories/thuc_pham_chuc_nang_level_1.png',
+  },
+  {
+    name: 'cham_soc_toc_da_dau_level_2.png',
+    count: 44,
+    image: '/assets/images/categories/cham_soc_toc_da_dau_level_2.png',
+  },
+  {
+    name: 'cham_soc_co_the_level_2.png',
+    count: 44,
+    image: '/assets/images/categories/cham_soc_co_the_level_2.png',
+  },
+  {
+    name: 've_sinh_ca_nhan_level_2.png',
+    count: 44,
+    image: '/assets/images/categories/ve_sinh_ca_nhan_level_2.png',
+  },
+  {
+    name: 'cham_soc_da_vung_mat_level_2.png',
+    count: 44,
+    image: '/assets/images/categories/cham_soc_da_vung_mat_level_2.png',
+  },
+  {
+    name: 'tinh_dau_cac_loai_level_2.png',
+    count: 44,
+    image: '/assets/images/categories/tinh_dau_cac_loai_level_2.png',
+  },
+  {
+    name: 'my_pham_trang_diem_level_2.png',
+    count: 44,
+    image: '/assets/images/categories/my_pham_trang_diem_level_2.png',
+  },
+  {
+    name: 'san_pham_tu_thien_nhien_level_2.png',
+    count: 44,
+    image: '/assets/images/categories/san_pham_tu_thien_nhien_level_2.png',
+  },
+  {
+    name: 'cham_soc_rang_mieng_level_2.png',
+    count: 44,
+    image: '/assets/images/categories/cham_soc_rang_mieng_level_2.png',
+  },
+  {
+    name: 'thuc_pham_do_uong_level_2.png',
+    count: 44,
+    image: '/assets/images/categories/thuc_pham_do_uong_level_2.png',
+  },
+  {
+    name: 'do_dung_gia_dinh_level_2.png',
+    count: 44,
+    image: '/assets/images/categories/do_dung_gia_dinh_level_2.png',
+  },
+  {
+    name: 'hang_tong_hop_level_2.png',
+    count: 44,
+    image: '/assets/images/categories/hang_tong_hop_level_2.png',
+  },
+  {
+    name: 'thiet_bi_lam_dep_level_2.png',
+    count: 44,
+    image: '/assets/images/categories/thiet_bi_lam_dep_level_2.png',
+  },
 ];
 export default function EditForm({ dialog, categories, categoryCurrent }) {
   const NewCategorySchema = Yup.object().shape(
