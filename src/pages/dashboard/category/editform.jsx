@@ -24,133 +24,6 @@ import { addCategory, updateCategory } from 'src/api/category';
 import FormProvider from 'src/components/hook-form/form-provider';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
-const LIST_ICON = [
-  {
-    name: 'than_kinh_nao_level_2.png',
-    count: 103,
-    image: '/assets/images/categories/than_kinh_nao_level_2.png',
-  },
-  {
-    name: 'tpcn_vitamin_khoang_chat_level_2.png',
-    count: 103,
-    image: '/assets/images/categories/tpcn_vitamin_khoang_chat_level_2.png',
-  },
-  {
-    name: 'suc_khoe_tim_mach_level_2.png',
-    count: 54,
-    image: '/assets/images/categories/suc_khoe_tim_mach_level_2.png',
-  },
-  {
-    name: 'tang_suc_de_khang_mien_dich_level_3.png',
-    count: 54,
-    image: '/assets/images/categories/tang_suc_de_khang_mien_dich_level_3.png',
-  },
-  {
-    name: 'ho_tro_tieu_hoa_level_2.png',
-    count: 323,
-    image: '/assets/images/categories/ho_tro_tieu_hoa_level_2.png',
-  },
-  {
-    name: 'sinh_li_noi_tiet_to_level_2.png',
-    count: 103,
-    image: '/assets/images/categories/sinh_li_noi_tiet_to_level_2.png',
-  },
-  {
-    name: 'dinh_duong_level_2.png',
-    count: 33,
-    image: '/assets/images/categories/dinh_duong_level_2.png',
-  },
-  {
-    name: 'ho_tro_dieu_tri_level_2.png',
-    count: 33,
-    image: '/assets/images/categories/ho_tro_dieu_tri_level_2.png',
-  },
-  {
-    name: 'giai_phap_lan_da_level_2.png',
-    count: 33,
-    image: '/assets/images/categories/giai_phap_lan_da_level_2.png',
-  },
-  {
-    name: 'cham_soc_da_mat_level_2.png',
-    count: 33,
-    image: '/assets/images/categories/cham_soc_da_mat_level_2.png',
-  },
-  {
-    name: 'ho_tro_lam_dep_level_2.png',
-    count: 33,
-    image: '/assets/images/categories/ho_tro_lam_dep_level_2.png',
-  },
-  {
-    name: 'ho_tro_tinh_duc_level_2.png',
-    count: 33,
-    image: '/assets/images/categories/ho_tro_tinh_duc_level_2.png',
-  },
-  {
-    name: 'thuc_pham_chuc_nang_level_1.png',
-    count: 44,
-    image: '/assets/images/categories/thuc_pham_chuc_nang_level_1.png',
-  },
-  {
-    name: 'cham_soc_toc_da_dau_level_2.png',
-    count: 44,
-    image: '/assets/images/categories/cham_soc_toc_da_dau_level_2.png',
-  },
-  {
-    name: 'cham_soc_co_the_level_2.png',
-    count: 44,
-    image: '/assets/images/categories/cham_soc_co_the_level_2.png',
-  },
-  {
-    name: 've_sinh_ca_nhan_level_2.png',
-    count: 44,
-    image: '/assets/images/categories/ve_sinh_ca_nhan_level_2.png',
-  },
-  {
-    name: 'cham_soc_da_vung_mat_level_2.png',
-    count: 44,
-    image: '/assets/images/categories/cham_soc_da_vung_mat_level_2.png',
-  },
-  {
-    name: 'tinh_dau_cac_loai_level_2.png',
-    count: 44,
-    image: '/assets/images/categories/tinh_dau_cac_loai_level_2.png',
-  },
-  {
-    name: 'my_pham_trang_diem_level_2.png',
-    count: 44,
-    image: '/assets/images/categories/my_pham_trang_diem_level_2.png',
-  },
-  {
-    name: 'san_pham_tu_thien_nhien_level_2.png',
-    count: 44,
-    image: '/assets/images/categories/san_pham_tu_thien_nhien_level_2.png',
-  },
-  {
-    name: 'cham_soc_rang_mieng_level_2.png',
-    count: 44,
-    image: '/assets/images/categories/cham_soc_rang_mieng_level_2.png',
-  },
-  {
-    name: 'thuc_pham_do_uong_level_2.png',
-    count: 44,
-    image: '/assets/images/categories/thuc_pham_do_uong_level_2.png',
-  },
-  {
-    name: 'do_dung_gia_dinh_level_2.png',
-    count: 44,
-    image: '/assets/images/categories/do_dung_gia_dinh_level_2.png',
-  },
-  {
-    name: 'hang_tong_hop_level_2.png',
-    count: 44,
-    image: '/assets/images/categories/hang_tong_hop_level_2.png',
-  },
-  {
-    name: 'thiet_bi_lam_dep_level_2.png',
-    count: 44,
-    image: '/assets/images/categories/thiet_bi_lam_dep_level_2.png',
-  },
-];
 export default function EditForm({ dialog, categories, categoryCurrent }) {
   const NewCategorySchema = Yup.object().shape(
     {
@@ -167,7 +40,7 @@ export default function EditForm({ dialog, categories, categoryCurrent }) {
       }),
 
       name: Yup.string().required('Name is required'),
-      icon: Yup.string().nullable(),
+      icon: Yup.string(),
     },
     [['code', 'code']]
   );
@@ -177,7 +50,7 @@ export default function EditForm({ dialog, categories, categoryCurrent }) {
       name: '',
       _id: '',
       parentId: null,
-      icon: null,
+      icon: '',
     }),
     []
   );
@@ -244,28 +117,8 @@ export default function EditForm({ dialog, categories, categoryCurrent }) {
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect
-                size="small"
-                name="icon"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-                label="Icon"
-              >
-                <MenuItem value={null}>
-                  <em>None</em>
-                </MenuItem>
-                {LIST_ICON.map((icon) => (
-                  <MenuItem key={icon.name} value={icon.name}>
-                    <img
-                      alt="s"
-                      src={icon.image}
-                      style={{ width: 24, height: 24, marginRight: 5 }}
-                    />
+              <RHFTextField size="small" name="icon" label="Icon" />
 
-                    {icon.name}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
               <RHFTextField required size="small" name="name" label="Category Name" />
               <RHFTextField size="small" name="code" label="Category Code" />
             </Stack>
