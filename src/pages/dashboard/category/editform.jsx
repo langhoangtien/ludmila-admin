@@ -8,21 +8,27 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { LoadingButton } from '@mui/lab';
 import {
+  Box,
   Card,
   Grid,
   Stack,
   Button,
   MenuItem,
   CardHeader,
+  Typography,
   DialogTitle,
   DialogContent,
   DialogActions,
 } from '@mui/material';
 
+import { fData } from 'src/utils/format-number';
+import { convertImagePathToUrl, convertImageUrlToPath } from 'src/utils/common';
+
+import { uploadFile } from 'src/api/file';
 import { addCategory, updateCategory } from 'src/api/category';
 
 import FormProvider from 'src/components/hook-form/form-provider';
-import { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import { RHFSelect, RHFTextField, RHFUploadAvatar } from 'src/components/hook-form';
 
 export default function EditForm({ dialog, categories, categoryCurrent }) {
   const NewCategorySchema = Yup.object().shape(
@@ -68,6 +74,7 @@ export default function EditForm({ dialog, categories, categoryCurrent }) {
     try {
       const mappedData = {
         ...data,
+        image: convertImageUrlToPath(data.image),
         code: data.code
           ? data.code
           : slugify(data.name, { locale: 'vi', remove: /[*+~.()'"!:@]/g }).toLowerCase(),
@@ -88,11 +95,23 @@ export default function EditForm({ dialog, categories, categoryCurrent }) {
       setValue('parentId', categoryCurrent.parentId);
       setValue('_id', categoryCurrent._id);
       setValue('icon', categoryCurrent.icon);
+      setValue('image', convertImagePathToUrl(categoryCurrent.image, 80));
     } else {
       reset(defaultValues);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryCurrent]);
+  const handleDropPhoto = async (acceptedFiles) => {
+    const file = acceptedFiles[0];
+    try {
+      const dataResponse = await uploadFile(file);
+      const url = convertImagePathToUrl(dataResponse.data.path, 80);
+
+      setValue('image', url, { shouldValidate: true });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <DialogTitle>new Category</DialogTitle>
@@ -101,26 +120,58 @@ export default function EditForm({ dialog, categories, categoryCurrent }) {
           <Card>
             <CardHeader title="Avatar" />
             <Stack p={3} spacing={3}>
-              <RHFSelect
-                size="small"
-                name="parentId"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-                label="Parent Category"
+              <Box
+                columnGap={2}
+                rowGap={3}
+                display="grid"
+                gridTemplateColumns={{
+                  xs: 'repeat(1, 1fr)',
+                  md: 'repeat(2, 1fr)',
+                }}
               >
-                <MenuItem value={null}>
-                  <em>None</em>
-                </MenuItem>
-                {categories.map((category) => (
-                  <MenuItem key={category._id} value={category._id}>
-                    {category.name}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-              <RHFTextField size="small" name="icon" label="Icon" />
+                <RHFUploadAvatar
+                  name="image"
+                  maxSize={102400}
+                  onDrop={handleDropPhoto}
+                  helperText={
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        mt: 3,
+                        mx: 'auto',
+                        display: 'block',
+                        textAlign: 'center',
+                        color: 'text.disabled',
+                      }}
+                    >
+                      Allowed *.jpeg, *.jpg, *.png, *.gif
+                      <br /> max size of {fData(102400)}
+                    </Typography>
+                  }
+                />
+                <Stack gap={2}>
+                  <RHFSelect
+                    size="small"
+                    name="parentId"
+                    InputLabelProps={{ shrink: true }}
+                    PaperPropsSx={{ textTransform: 'capitalize' }}
+                    label="Parent Category"
+                  >
+                    <MenuItem value={null}>
+                      <em>None</em>
+                    </MenuItem>
+                    {categories.map((category) => (
+                      <MenuItem key={category._id} value={category._id}>
+                        {category.name}
+                      </MenuItem>
+                    ))}
+                  </RHFSelect>
+                  <RHFTextField size="small" name="icon" label="Icon" />
 
-              <RHFTextField required size="small" name="name" label="Category Name" />
-              <RHFTextField size="small" name="code" label="Category Code" />
+                  <RHFTextField required size="small" name="name" label="Category Name" />
+                  <RHFTextField size="small" name="code" label="Category Code" />
+                </Stack>
+              </Box>
             </Stack>
           </Card>
         </Grid>

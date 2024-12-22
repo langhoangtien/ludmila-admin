@@ -37,7 +37,10 @@ export default function ProductEditView({ id }) {
 
           return { ...variant, image: img };
         });
-        const category = productData.category ? productData.category._id : undefined;
+        const category =
+          productData.category && Array.isArray(productData.category)
+            ? productData.category.map((i) => ({ name: i.name, _id: i._id }))
+            : undefined;
         const country = productData.country ? productData.country._id : undefined;
         const brand = productData.brand ? productData.brand._id : undefined;
         const vendor = productData.vendor ? productData.vendor._id : undefined;

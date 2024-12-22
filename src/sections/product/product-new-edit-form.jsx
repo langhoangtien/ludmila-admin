@@ -116,7 +116,8 @@ export default function ProductNewEditForm({ currentProduct }) {
       introduction: Yup.string(),
       images: Yup.array(),
       tags: Yup.array(),
-      category: Yup.string().required('Category is required'),
+      // category: Yup.array().of(Yup.string()).required('Category is required'),
+      category: Yup.array().min(1, 'Category is required'),
       country: Yup.string().required('Country is required'),
       brand: Yup.string().required('Brand is required'),
       price: Yup.number().moreThan(0, 'Price should not be $0.00'),
@@ -166,7 +167,7 @@ export default function ProductNewEditForm({ currentProduct }) {
       code: currentProduct?.code || undefined,
       barCode: currentProduct?.barCode || '',
       tags: currentProduct?.tags || [],
-      category: currentProduct?.category || '',
+      category: currentProduct?.category || [],
       country: currentProduct?.country || '',
       brand: currentProduct?.brand || '',
       attributes: currentProduct?.attributes || [],
@@ -217,6 +218,7 @@ export default function ProductNewEditForm({ currentProduct }) {
 
     const dataSend = {
       ...data,
+      category: [...new Set(data.category.map((i) => i._id))],
       slug: data.slug
         ? data.slug
         : slugify(data.name, { locale: 'vi', remove: /[*+~.()'"!:@]/g }).toLowerCase(),
@@ -249,7 +251,6 @@ export default function ProductNewEditForm({ currentProduct }) {
       const files = values.images || [];
       const filesUpload = await uploadFiles(acceptedFiles);
       const filesUploadData = filesUpload.data.map((file) => convertImagePathToUrl(file.path));
-      console.log(filesUploadData);
       setValue('images', [...files, ...filesUploadData], { shouldValidate: true });
     },
     [setValue, values.images]
@@ -715,7 +716,37 @@ export default function ProductNewEditForm({ currentProduct }) {
                   md: 'repeat(2, 1fr)',
                 }}
               >
-                <RHFSelect
+                <RHFAutocomplete
+                  name="category"
+                  label="Category"
+                  size="small"
+                  placeholder="+ Category"
+                  multiple
+                  filterSelectedOptions
+                  options={dataSelect.categories.map((option) => ({
+                    name: option.name,
+                    _id: option._id,
+                  }))}
+                  getOptionLabel={(option) => option.name}
+                  renderOption={(props, option) => (
+                    <li {...props} key={option}>
+                      {option.name}
+                    </li>
+                  )}
+                  renderTags={(selected, getTagProps) =>
+                    selected.map((option, index) => (
+                      <Chip
+                        {...getTagProps({ index })}
+                        key={option._id}
+                        label={option.name}
+                        size="small"
+                        color="info"
+                        variant="soft"
+                      />
+                    ))
+                  }
+                />
+                {/* <RHFSelect
                   size="small"
                   name="category"
                   label="Category"
@@ -731,7 +762,7 @@ export default function ProductNewEditForm({ currentProduct }) {
                       {category.name}
                     </MenuItem>
                   ))}
-                </RHFSelect>
+                </RHFSelect> */}
                 <RHFSelect
                   size="small"
                   name="country"

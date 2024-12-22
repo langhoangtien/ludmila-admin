@@ -2,6 +2,7 @@ import { HOST_API } from 'src/config-global';
 
 export const convertImagePathToUrl = (filePath, dimension) => {
   if (!filePath) return undefined;
+  if (dimension === 'originals') return `${HOST_API}/api/v1/files/originals/${filePath}`;
   return `${HOST_API}/api/v1/files${dimension ? `/${dimension}x${dimension}` : ''}/${filePath}`;
 };
 
