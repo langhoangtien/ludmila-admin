@@ -53,6 +53,11 @@ export const endpoints = {
     search: '/api/v1/products/s',
     removeMany: '/api/v1/products/remove-many',
   },
+  page: {
+    list: '/api/v1/pages',
+    search: '/api/v1/pages/s',
+    removeMany: '/api/v1/pages/remove-many',
+  },
   user: {
     list: '/api/v1/users',
     details: '/api/v1/users/663f3067cc624fb4df7fc6bf',

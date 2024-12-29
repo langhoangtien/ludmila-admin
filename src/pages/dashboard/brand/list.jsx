@@ -88,6 +88,7 @@ export default function BrandListPage() {
           }}
         >
           <ApiTable
+            moduleName="Thương hiệu"
             tableHead={TABLE_HEAD}
             apiURL={endpoints.brand.list}
             mapFunction={(brand) => ({

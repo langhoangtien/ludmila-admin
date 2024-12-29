@@ -46,7 +46,13 @@ import { ConfirmDialog } from '../custom-dialog';
 
 // ----------------------------------------------------------------------
 
-export default function ApiTable({ apiURL, mapFunction, tableHead, reload = false }) {
+export default function ApiTable({
+  apiURL,
+  mapFunction,
+  tableHead,
+  moduleName = 'Sản phẩm',
+  reload = false,
+}) {
   const [loading, setLoading] = useState(true);
 
   const [text, setText] = useState('');
@@ -164,7 +170,7 @@ export default function ApiTable({ apiURL, mapFunction, tableHead, reload = fals
           pr: { xs: 2.5, md: 1 },
         }}
       >
-        <Typography variant="h6">Product</Typography>
+        <Typography variant="h6">{moduleName}</Typography>
         <Stack
           direction="row"
           justifyContent="space-between"
@@ -281,10 +287,10 @@ export default function ApiTable({ apiURL, mapFunction, tableHead, reload = fals
       <ConfirmDialog
         open={confirmRows.value}
         onClose={confirmRows.onFalse}
-        title="Delete"
+        title="Xóa"
         content={
           <>
-            Are you sure want to delete <strong> {selected.length} </strong> items?
+            Chắc chắn bạn muốn xóa <strong> {selected.length} </strong> mục?
           </>
         }
         action={
@@ -296,7 +302,7 @@ export default function ApiTable({ apiURL, mapFunction, tableHead, reload = fals
               confirmRows.onFalse();
             }}
           >
-            Delete
+            Xóa
           </Button>
         }
       />
@@ -309,6 +315,7 @@ ApiTable.propTypes = {
   mapFunction: PropTypes.func,
   tableHead: PropTypes.array,
   reload: PropTypes.bool,
+  moduleName: PropTypes.string,
 };
 
 function CollapsibleTableRow({ row, checked, selected, onSelectRow, tableHead }) {

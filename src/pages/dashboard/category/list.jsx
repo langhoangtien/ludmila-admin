@@ -56,7 +56,7 @@ export default function CategoryListPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Product List</title>
+        <title> Danh mục</title>
       </Helmet>
 
       <Container
@@ -72,10 +72,10 @@ export default function CategoryListPage() {
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
             {
-              name: 'Product',
+              name: 'Danh mục',
               href: paths.dashboard.product.root,
             },
-            { name: 'List' },
+            { name: 'Danh sách' },
           ]}
           action={
             <Button
@@ -83,7 +83,7 @@ export default function CategoryListPage() {
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              New Product
+              Thêm mới
             </Button>
           }
           sx={{
@@ -104,6 +104,7 @@ export default function CategoryListPage() {
         >
           <ApiTable
             tableHead={TABLE_HEAD}
+            moduleName="Danh mục"
             apiURL={endpoints.category.list}
             mapFunction={(category) => ({
               ...category,

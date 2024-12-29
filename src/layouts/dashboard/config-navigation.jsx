@@ -115,12 +115,8 @@ export function useNavData() {
             icon: ICONS.product,
             children: [
               { title: t('list'), path: paths.dashboard.product.root },
-              {
-                title: t('details'),
-                path: paths.dashboard.product.demo.details,
-              },
+
               { title: t('create'), path: paths.dashboard.product.new },
-              { title: t('edit'), path: paths.dashboard.product.demo.edit },
             ],
           },
 
@@ -142,11 +138,16 @@ export function useNavData() {
             ],
           },
 
-          // KANBAN
+          // PAGE
+
           {
-            title: t('kanban'),
-            path: paths.dashboard.kanban,
+            title: t('page'),
+            path: paths.dashboard.page.root,
             icon: ICONS.kanban,
+            children: [
+              { title: t('list'), path: paths.dashboard.page.root },
+              { title: t('create'), path: paths.dashboard.page.new },
+            ],
           },
         ],
       },

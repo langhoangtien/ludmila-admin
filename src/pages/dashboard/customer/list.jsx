@@ -27,7 +27,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { endpoints } from 'src/utils/axios';
 
-import { addCustomer, updateCustomer, generateCustomerAPI } from 'src/api/customer'; // Thêm import và thay đổi từ 'category' thành 'customer'
+import { addCustomer, updateCustomer } from 'src/api/customer'; // Thêm import và thay đổi từ 'category' thành 'customer'
 
 import Iconify from 'src/components/iconify';
 import ApiTable from 'src/components/api-table/api-table';
@@ -77,9 +77,9 @@ export default function CustomerListPage() {
   } = methods;
   const values = watch();
 
-  const add10000Customer = async () => {
-    generateCustomerAPI();
-  };
+  // const add10000Customer = async () => {
+  //   generateCustomerAPI();
+  // };
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (!values._id) await addCustomer(data); // Thay đổi từ 'addCategory' thành 'addCustomer'
@@ -152,10 +152,10 @@ export default function CustomerListPage() {
             flexDirection: { md: 'column' },
           }}
         >
-          <Button onClick={add10000Customer} variant="contained">
+          {/* <Button onClick={add10000Customer} variant="contained">
             {' '}
             100k khach hang
-          </Button>
+          </Button> */}
           <ApiTable
             reload={reload}
             tableHead={TABLE_HEAD}

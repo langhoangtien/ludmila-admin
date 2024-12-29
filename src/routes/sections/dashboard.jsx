@@ -37,7 +37,9 @@ const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
 const UserCreatePage = lazy(() => import('src/pages/dashboard/user/new'));
 const UserEditPage = lazy(() => import('src/pages/dashboard/user/edit'));
 
-const KanbanPage = lazy(() => import('src/pages/dashboard/kanban'));
+const ListPage = lazy(() => import('src/pages/dashboard/page/list'));
+const CreatePage = lazy(() => import('src/pages/dashboard/page/new'));
+const EditPage = lazy(() => import('src/pages/dashboard/page/edit'));
 // TEST RENDER PAGE BY ROLE
 
 // ----------------------------------------------------------------------
@@ -117,8 +119,15 @@ export const dashboardRoutes = [
           { path: ':id', element: <OrderDetailsPage /> },
         ],
       },
-
-      { path: 'kanban', element: <KanbanPage /> },
+      {
+        path: 'page',
+        children: [
+          { element: <ListPage />, index: true },
+          { path: 'list', element: <ListPage /> },
+          { path: 'new', element: <CreatePage /> },
+          { path: ':id/edit', element: <EditPage /> },
+        ],
+      },
     ],
   },
 ];
