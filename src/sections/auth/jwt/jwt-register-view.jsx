@@ -83,7 +83,7 @@ export default function JwtRegisterView() {
         <Typography variant="body2"> Bạn đã có tài khoản? </Typography>
 
         <Link href={paths.auth.jwt.login} component={RouterLink} variant="subtitle2">
-          Đăng ký
+          Đăng nhập
         </Link>
       </Stack>
     </Stack>
