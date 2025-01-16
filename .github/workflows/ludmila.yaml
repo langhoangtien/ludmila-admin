@@ -25,7 +25,7 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: Add environment variables
-        run: echo "VITE_HOST_API=https://api.ludmila.vn.vn" >> .env
+        run: echo "VITE_HOST_API=https://api.ludmila.vn" >> .env
 
       # Build project
       - name: Build project
